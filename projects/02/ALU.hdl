@@ -42,5 +42,31 @@ CHIP ALU {
         ng; // 1 if (out < 0),  0 otherwise
 
     PARTS:
-   // Put you code here:
+    // Put you code here:
+    // 변수 x 전처리
+    Mux16(a=x, b=false, sel=zx, out=x0);
+    Not16(in=x0, out=notx);
+    Mux16(a=x0, b=notx, sel=nx, out=x1);
+
+    // 변수 y 전처리
+    Mux16(a=y, b=false, sel=zy, out=y0);
+    Not16(in=y0, out=noty);
+    Mux16(a=y0, b=noty, sel=ny, out=y1);
+
+    // 덧셈 혹은 and연산 판별
+    Add16(a=x1, b=y1, out=xyAdd);
+    And16(a=x1, b=y1, out=xyAnd);
+    Mux16(a=xyAnd, b=xyAdd, sel=f, out=result);
+
+    // 연산 후처리
+    Not16(in=result, out=ngResult);
+
+    // 결과 출력 및 ng 판별
+    Mux16(a=result, b=ngResult, sel=no, out=out, out[0..7]=lowout, out[8..15]=highout, out[15]=ng);
+
+    // zr 판별
+    Or8Way(in=lowout, out=lowzr);
+    Or8Way(in=highout, out=highzr);
+    Or(a=lowzr, b=highzr, out=zr2);
+    Not(in=zr2, out=zr);
 }
