@@ -2,6 +2,7 @@
 
 - 실습 내용은 projects 폴더에 전부 있음
 - tools -> 빌트인 칩 관련 폴더. 건드릴 일이 거의 없음  
+
 <br>
 <br>
 
@@ -28,6 +29,7 @@
 [Mux4Way16](./projects/01/Mux4Way16.hdl), 
 [Mux8Way16](./projects/01/Mux8Way16.hdl), 
 [DMux4Way16](./projects/01/DMux4Way16.hdl)
+
 <br>
 <br>
 
@@ -39,10 +41,21 @@
 ### [증분기](./projects/02/Inc16.hdl)
 ### [ALU](./projects/02/ALU.hdl)
 
+<br>
+<br>
 
+
+## 3장
+### [Bit](./projects/03/a/Bit.hdl)
+### [Register](./projects/03/a/Register.hdl)
+
+### [RAM8](./projects/03/a/RAM8.hdl) [RAM64](./projects/03/a/RAM64.hdl) [RAM512](./projects/03/b/RAM512.hdl) [RAM4K](./projects/03/b/RAM4K.hdl) [RAM16K](./projects/03/b/RAM16K.hdl)
+
+### [PC](./projects/03/a/PC.hdl)
 
 <br>
 <br>
+
 
 ## Reference
 [https://www.nand2tetris.org/](https://www.nand2tetris.org/)
