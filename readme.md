@@ -7,10 +7,10 @@
 
 ## 1장
 ### 기본 게이트
-[Not](./projects/01/Not.hdl), 
-[And](./projects/01/And.hdl), 
-[Or](./projects/01/Or.hdl), 
-[Xor](./projects/01/Xor.hdl)
+[Not](./projects/01/Not.hdl){:target="_blank"}, 
+[And](./projects/01/And.hdl){:target="_blank"}, 
+[Or](./projects/01/Or.hdl){:target="_blank"}, 
+[Xor](./projects/01/Xor.hdl){:target="_blank"}
 
 ### 멀티플렉서 / 디멀티플렉서
 [Mux](./projects/01/Mux.hdl), 
