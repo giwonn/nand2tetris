@@ -6,7 +6,7 @@
 <br>
 <br>
 
-## 1장
+## 1장 - 불 논리
 ### 기본 게이트
 [Not](./projects/01/Not.hdl), 
 [And](./projects/01/And.hdl), 
@@ -34,7 +34,7 @@
 <br>
 
 
-## 2장
+## 2장 - 불 연산
 ### [반가산기](./projects/02/HalfAdder.hdl)
 ### [전가산기](./projects/02/FullAdder.hdl)
 ### [가산기](./projects/02/Add16.hdl)
@@ -45,7 +45,7 @@
 <br>
 
 
-## 3장
+## 3장 - 메모리
 ### [Bit](./projects/03/a/Bit.hdl)
 ### [Register](./projects/03/a/Register.hdl)
 
