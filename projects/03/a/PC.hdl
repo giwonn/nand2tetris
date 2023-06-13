@@ -17,4 +17,20 @@ CHIP PC {
 
     PARTS:
     // Put your code here:
+    
+    // 기존 코드
+    // Inc16(in=result, out=increasedResult);
+    // Mux8Way16(a=result, b=increasedResult, c=in, d=in, e=false, f=false, g=false, h=false, sel[2]=reset, sel[1]=load, sel[0]=inc, out=w0);
+    // Register(in=w0, load=true, out=result, out=out);
+
+    // 개선된 코드
+    // inc
+    Inc16(in=result, out=increasedResult);
+    Mux16(a=result, b=increasedResult, sel=inc, out=w0);
+    // load
+    Mux16(a=w0, b=in, sel=load, out=w1);
+    // reset
+    Mux16(a=w1, b=false, sel=reset, out=w2);
+    // 저장
+    Register(in=w2, load=true, out=result, out=out);
 }
