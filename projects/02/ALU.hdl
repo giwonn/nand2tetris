@@ -44,12 +44,16 @@ CHIP ALU {
     PARTS:
     // Put you code here:
     // 변수 x 전처리
+    // zx
     Mux16(a=x, b=false, sel=zx, out=x0);
+    // nx
     Not16(in=x0, out=notx);
     Mux16(a=x0, b=notx, sel=nx, out=x1);
 
     // 변수 y 전처리
+    // zy
     Mux16(a=y, b=false, sel=zy, out=y0);
+    // ny
     Not16(in=y0, out=noty);
     Mux16(a=y0, b=noty, sel=ny, out=y1);
 
