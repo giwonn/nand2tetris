@@ -14,7 +14,7 @@
 // Put your code here.
 // reference: https://github.com/tamarl02/nand2tetris/blob/master/04/fill/Fill.asm
 (INIT)
-// 512 * 256 = 131,072개의 비트.
+// 스크린은 512 * 256 = 131,072개의 비트로 이루어짐.
 // 핵 OS에서 메모리는 16비트 단위로 관리하므로 메모리주소를 131072 / 16 = 8192번 증가시키면 모든 스크린 루프 가능
 @8192
 D=A // D = 8192
