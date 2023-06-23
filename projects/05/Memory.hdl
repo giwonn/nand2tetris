@@ -22,10 +22,32 @@
  * Screen and Keyboard chip specifications given in the book.
  */
 
+// RAM16K(0x0000 ~ 0x3FFF): 000 0000 0000 0000  ~ 011 1111 1111 1111
+// Screen(0x4000 ~ 0x5FFF): 100 0000 0000 0000 ~ 101 1111 1111 1111
+// Keyboard(0x6000 ~ ): 110 0000 0000 0000 ~ 이후의 범위는 키보드 맵에 따라 달라짐
+
 CHIP Memory {
     IN in[16], load, address[15];
     OUT out[16];
 
     PARTS:
     // Put your code here:
+    // address[13..14] 기준
+    // 00, 01은 RAM
+    // 10은 Screen
+    // 11은 Keyboard
+    DMux4Way(in=load, sel=address[13..14], a=ramLoad0, b=ramLoad1, c=screenLoad, d=keyboardLoad);
+
+    // ram0 또는 ram1이 출력이 되면 어떤 값이든 RAM16K로 쏴주면 됨
+    Or(a=ramLoad0, b=ramLoad1, out=ramLoad);
+    RAM16K(in=in, load=ramLoad, address=address[0..13], out=ramOut);
+
+    // screen
+    Screen(in=in, load=screenLoad, address=address[0..12], out=screenOut);
+
+    // keyboard는 out만 함
+    Keyboard(out=keyboardOut);
+    
+    // 하나만 출력해줌
+    Mux4Way16(a=ramOut, b=ramOut, c=screenOut, d=keyboardOut, sel=address[13..14], out=out);
 }

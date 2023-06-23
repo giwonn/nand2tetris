@@ -40,4 +40,49 @@ CHIP CPU {
 
     PARTS:
     // Put your code here:
+    Not(in=instruction[15], out=aInstruction);
+    Not(in=aInstruction, out=cInstruction);
+
+    // writeM
+    And(a=cInstruction, b=instruction[3], out=writeM);
+
+    // ALU input A
+    And(a=cInstruction, b=instruction[4], out=dRegisterLoad);
+    DRegister(in=aluOut, load=dRegisterLoad, out=aluX);
+
+    // addressM
+    Mux16(a=instruction, b=aluOut, sel=cInstruction, out=w0);
+    And(a=cInstruction, b=instruction[5], out=w1);
+    Or(a=w1, b=aInstruction, out=aRegisterLoad);
+    ARegister(in=w0, load=aRegisterLoad, out=aRegister, out[0..14]=addressM);
+    // ALU input b
+    Mux16(a=aRegister, b=inM, sel=instruction[12], out=aluY);
+
+    // ALU
+    ALU(x=aluX, y=aluY, zx=instruction[11], nx=instruction[10], zy=instruction[9], ny=instruction[8], f=instruction[7], no=instruction[6], out=aluOut, zr=zr, ng=ng);
+    // outM
+    Or16(a=aluOut, b=false, out=outM);
+
+    // PC 사전작업
+    // instruction[2] : 음수일 때 점프
+    And(a=instruction[2], b=ng, out=jlt);
+    
+    // instruction[1] : 0일 때 점프
+    And(a=instruction[1], b=zr, out=jeq);
+
+    // instruction[0] : 양수일 때 점프
+    Or(a=ng, b=zr, out=ngOrZr);
+    Not(in=ngOrZr, out=positive);
+    And(a=positive, b=instruction[0], out=jgt);
+
+    // 위 조건 중 하나라도 만족하면 true
+    Or(a=jlt, b=jeq, out=jle);
+    Or(a=jle, b=jgt, out=isJump);
+    And(a=cInstruction, b=isJump, out=pcLoad);
+
+    // if (pcLoad) 'load' else 'inc'
+    Not(in=pcLoad, out=pcInc);
+    
+    // PC
+    PC(in=aRegister, load=pcLoad, inc=pcInc, reset=reset, out[0..14]=pc);
 }
