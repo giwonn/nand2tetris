@@ -55,6 +55,7 @@ CHIP CPU {
     And(a=cInstruction, b=instruction[5], out=w1);
     Or(a=w1, b=aInstruction, out=aRegisterLoad);
     ARegister(in=w0, load=aRegisterLoad, out=aRegister, out[0..14]=addressM);
+    
     // ALU input b
     Mux16(a=aRegister, b=inM, sel=instruction[12], out=aluY);
 
