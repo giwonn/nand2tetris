@@ -60,9 +60,17 @@
 ### [Mult(곱셈 프로그램)](./projects/04/mult/Mult.asm)
 ### [Fill(키보드+스크린)](./projects/04/fill/Fill.asm)
 
+<br>
+<br>
+
+## 5장 - 컴퓨터 아키텍처
+### [Memory](./projects/05/Memory.hdl)
+### [CPU](./projects/05/CPU.hdl)
+### [Computer](./projects/05/Computer.hdl)
 
 <br>
 <br>
+
 
 
 ## Reference
