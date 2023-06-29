@@ -21,7 +21,7 @@ public class Main {
 					SymbolTable symbolTable = createSymbolTable(file);
 
 					// parser, code 모듈 초기화
-					Parser parser = new Parser(new BufferedReader(new FileReader(file)));
+					Parser parser = new Parser(file);
 					Code code = new Code();
 
 					// 변환한 기계어 저장할 파일 및 스트림 생성
@@ -85,8 +85,7 @@ public class Main {
 	}
 
 	static SymbolTable createSymbolTable(File file) throws IOException {
-		Reader f = new FileReader(file);
-		Parser parser = new Parser(new BufferedReader(new FileReader(file)));
+		Parser parser = new Parser(file);
 		SymbolTable symbolTable = new SymbolTable();
 		int lineNumber = 0;
 

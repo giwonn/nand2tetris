@@ -7,8 +7,8 @@ public class Parser {
 	private String nextLine;
 	public String currentLine;
 
-	public Parser(BufferedReader br) {
-		this.br = br;
+	public Parser(File file) throws FileNotFoundException {
+		this.br = new BufferedReader(new FileReader(file));
 	}
 
 	boolean hasMoreLines() {
