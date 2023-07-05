@@ -7,7 +7,7 @@ public class Parser {
 	private String nextLine;
 	public String currentLine;
 
-	public Parser(File file) throws FileNotFoundException {
+	public Parser(File file) throws IOException {
 		this.br = new BufferedReader(new FileReader(file));
 	}
 
