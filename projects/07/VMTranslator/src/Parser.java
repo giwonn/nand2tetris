@@ -38,8 +38,9 @@ public class Parser {
 	}
 
 	public String arg1() {
-		if (commandType() == CommandType.C_RETURN)
+		if (commandType() == CommandType.C_RETURN) {
 			throw new IllegalStateException("invalid first argument: " + commandType().name());
+		}
 		if (commandType() == CommandType.C_ARITHMETIC) return currentLine[0];
 		return currentLine[1];
 	}
@@ -48,7 +49,7 @@ public class Parser {
 		return switch (commandType()) {
 			case C_PUSH, C_POP, C_FUNCTION, C_CALL -> Integer.parseInt(currentLine[2]);
 			default ->
-					throw new IllegalStateException("Specific arguments(PUSH, POP, FUNCTION, CALL) are only called second argument: " + commandType().name());
+				throw new IllegalStateException("Specific arguments(PUSH, POP, FUNCTION, CALL) are only called second argument: " + commandType().name());
 		};
 	}
 

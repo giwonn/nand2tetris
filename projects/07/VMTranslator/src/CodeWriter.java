@@ -1,9 +1,14 @@
 import java.io.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class CodeWriter {
 	private final PrintWriter pw;
 	private final String fileName;
 	private int currentLine;
+
+	List<String> calculationArithmeticList = Arrays.asList("add", "sub", "eq", "gt", "lt", "and", "or");
 
 	public CodeWriter(String filePath) throws IOException {
 		File file = new File(filePath);
@@ -18,104 +23,59 @@ public class CodeWriter {
 		currentLine++;
 	}
 
-	private boolean commandEqualCheck(String a, String b) {
-		if (!a.equals(b)) return false;
-
-		pw.println("// " + a);
-		return true;
-	}
-
 	public void writeArithmetic(String command) {
 		addLine("@SP" + " // " + command);
 		addLine("A=M-1");
 
-		switch (command) {
-			case "add", "sub", "eq", "gt", "lt", "and", "or" -> {
-				addLine("D=M");
-				addLine("A=A-1");
-			}
+		if (calculationArithmeticList.contains(command)) {
+			prependArithmeticCommand();
 		}
 
-		if (command.equals("add")) {
-			// x = x + y
-			addLine("M=M+D");
-		}
+		switch(command) {
+			case "add" -> addLine("M=M+D");
+			case "sub" -> addLine("M=M-D");
+			case "and" -> addLine("M=M&D");
+			case "or" -> addLine("M=M|D");
+			case "neg" -> addLine("M=-M");
+			case "not" -> addLine("M=!M");
+			case "eq", "gt", "lt" -> {
+				addLine("D=M-D");
+				addLine("M=-1");
 
-		if (command.equals("sub")) {
-			// x = x - D = x - y
-			addLine("M=M-D");
-		}
+				addLine("@" + (currentLine + 6));
+				addLine("D;J"+command.toUpperCase());
 
-		if (command.equals("eq")) {
-			addLine("D=M-D");
-			addLine("M=0");
-
-			addLine("@" + (currentLine + 6));
-			addLine("D;JNE");
-
-			addLine("@SP");
-			addLine("A=M-1");
-			addLine("A=A-1");
-			addLine("M=-1");
-		}
-
-		if (command.equals("gt")) {
-			addLine("D=M-D");
-			addLine("M=0");
-
-			addLine("@" + (currentLine + 6));
-			addLine("D;JLE");
-
-			addLine("@SP");
-			addLine("A=M-1");
-			addLine("A=A-1");
-			addLine("M=-1");
-		}
-
-		if (command.equals("lt")) {
-			// D = x - y
-			addLine("D=M-D");
-			// x 자리 0으로 미리 초기화
-			addLine("M=0");
-
-			// D가 0 이상이면 점프
-			addLine("@" + (currentLine + 6));
-			addLine("D;JGE");
-
-			// 점프안하면 D가 음수이므로 x로 이동하여 -1로 초기화
-			addLine("@SP");
-			addLine("A=M-1");
-			addLine("A=A-1");
-			addLine("M=-1");
-		}
-
-		if (command.equals("and")) {
-			addLine("M=M&D");
-		}
-
-		if (command.equals("or")) {
-			addLine("M=M|D");
-		}
-
-		if (command.equals("neg")) {
-			addLine("M=-M");
-		}
-
-		if (command.equals("not")) {
-			addLine("M=!M");
-		}
-
-		switch (command) {
-			case "add", "sub", "eq", "gt", "lt", "and", "or" -> {
 				addLine("@SP");
-				addLine("M=M-1");
+				addLine("A=M-1");
+				addLine("A=A-1");
+				addLine("M=0");
 			}
 		}
+
+		if (calculationArithmeticList.contains(command)) {
+			appendArithmeticCommand();
+		}
+	}
+
+	private void prependArithmeticCommand() {
+		addLine("D=M");
+		addLine("A=A-1");
+	}
+
+	private void appendArithmeticCommand() {
+		addLine("@SP");
+		addLine("M=M-1");
 	}
 
 	public void writePushPop(CommandType commandType, String segment, int index) {
 		if (commandType != CommandType.C_PUSH && commandType != CommandType.C_POP) {
 			throw new IllegalArgumentException("commandType must be C_PUSH or C_POP");
+		}
+		if (segment.equals("pointer") && !(index == 0 || index == 1)) {
+			throw new IllegalArgumentException("If command is 'pointer', index must be 0 or 1: " + index);
+		}
+		if (segment.equals("temp") && !(index >= 0 && index <= 7)) {
+			throw new IllegalArgumentException("If command is 'temp', index must be 0~7: " + index);
 		}
 
 		String mappingAddress = switch (segment) {
@@ -123,18 +83,8 @@ public class CodeWriter {
 			case "argument" -> "ARG";
 			case "this" -> "THIS";
 			case "that" -> "THAT";
-			case "pointer" -> {
-				if (!(index == 0 || index == 1)) {
-					throw new IllegalArgumentException("If command is 'pointer', index must be 0 or 1: " + index);
-				}
-				yield String.valueOf(index + 3);
-			}
-			case "temp" -> {
-				if (index < 0 || index > 7) {
-					throw new IllegalArgumentException("If command is 'temp', index must be 0~7: " + index);
-				}
-				yield String.valueOf(index + 5);
-			}
+			case "pointer" -> String.valueOf(index + 3);
+			case "temp" ->  String.valueOf(index + 5);
 			case "constant" -> String.valueOf(index);
 			case "static" -> fileName + "." + index;
 			default -> throw new IllegalArgumentException("Unexpected segment: " + segment);
