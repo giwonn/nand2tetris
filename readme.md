@@ -71,7 +71,17 @@
 <br>
 <br>
 
+## 6장 - 어셈블러
+[작성 코드(java)](./projects/06/assembler/src)
 
+<br>
+<br>
+
+## 7장 - 가상머신(1)
+[작성 코드(java)](./projects/07/VMTranslator/src)
+
+<br>
+<br>
 
 ## Reference
 [https://www.nand2tetris.org/](https://www.nand2tetris.org/)
