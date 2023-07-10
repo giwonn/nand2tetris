@@ -1,12 +1,12 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class CodeWriter {
 	private final PrintWriter pw;
-	private final String fileName;
+	private String fileName;
+	private Map<String, Integer> fileLabelNumber;
 	private int currentLine;
+
 
 	List<String> calculationArithmeticList = Arrays.asList("add", "sub", "eq", "gt", "lt", "and", "or");
 
@@ -22,6 +22,60 @@ public class CodeWriter {
 		pw.println(command);
 		currentLine++;
 	}
+
+//	private void bootstrap() {
+//		pw.println("// bootstrap");
+//		addLine("@256");
+//		addLine("D=A");
+//		addLine("@SP");
+//		addLine("M=D");
+//		writeCall("Sys.init", 0);
+//	}
+
+	public void setFileName(String fileName) {
+		this.fileName = fileName;
+	}
+
+	public void writeLabel(String label) {
+		pw.println("("+label+")");
+	}
+
+	public void writeGoto(String label) {
+		pw.println("// goto " + label);
+		addLine("@" + label);
+		addLine("0;JMP");
+	}
+
+	public void writeIf(String label) {
+		pw.println("// if-goto " + label);
+		addLine("@SP");
+		addLine("AM=M-1");
+		addLine("D=M");
+		addLine("@" + label);
+		addLine("D;JNE");
+	}
+
+//	public void writeFunction(String functionName, int nVars) {
+//		pw.println("// function " + functionName + " " + nVars);
+//		addLine("(" + functionName + ")");
+//		addLine("@SP");
+//		addLine("A=M");
+//		for (int i = 0; i < nVars; i++) {
+//			writePushPop(CommandType.C_PUSH, "constant", 0);
+//		}
+//	}
+//
+//	public void writeCall(String functionName, int nArgs) {
+//		pw.println("// call " + functionName + " " + nArgs);
+//		writeGoto(functionName);
+//		if (fileLabelNumber.containsKey(functionName)) {
+//			fileLabelNumber.put(functionName, fileLabelNumber.get(functionName) + 1);
+//			writeLabel(functionName + "$ret" + fileLabelNumber.get(functionName));
+//		} else {
+//			fileLabelNumber.put(functionName, 0);
+//			writeLabel(functionName + "$ret" + fileLabelNumber.get(functionName));
+//		}
+//	}
 
 	public void writeArithmetic(String command) {
 		addLine("@SP" + " // " + command);
