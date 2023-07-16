@@ -1,9 +1,11 @@
+import com.sun.source.doctree.TextTree;
+
 import java.io.*;
 import java.sql.SQLOutput;
 import java.util.Map;
 
 public class Parser {
-	private BufferedReader br;
+	private final BufferedReader br;
 	private String nextLine;
 	public String currentLine;
 

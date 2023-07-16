@@ -13,9 +13,9 @@ public class CodeWriter {
 	public CodeWriter(String filePath) throws IOException {
 		File file = new File(filePath);
 		String asmFilePath = file.getCanonicalPath().replace(".vm", ".asm");
-		fileName = file.getName();
 		pw = new PrintWriter(asmFilePath);
 		currentLine = 0;
+		bootstrap();
 	}
 
 	private void addLine(String command) {
@@ -23,59 +23,18 @@ public class CodeWriter {
 		currentLine++;
 	}
 
-//	private void bootstrap() {
+	private void bootstrap() {
 //		pw.println("// bootstrap");
 //		addLine("@256");
 //		addLine("D=A");
 //		addLine("@SP");
 //		addLine("M=D");
 //		writeCall("Sys.init", 0);
-//	}
+	}
 
 	public void setFileName(String fileName) {
 		this.fileName = fileName;
 	}
-
-	public void writeLabel(String label) {
-		pw.println("("+label+")");
-	}
-
-	public void writeGoto(String label) {
-		pw.println("// goto " + label);
-		addLine("@" + label);
-		addLine("0;JMP");
-	}
-
-	public void writeIf(String label) {
-		pw.println("// if-goto " + label);
-		addLine("@SP");
-		addLine("AM=M-1");
-		addLine("D=M");
-		addLine("@" + label);
-		addLine("D;JNE");
-	}
-
-//	public void writeFunction(String functionName, int nVars) {
-//		pw.println("// function " + functionName + " " + nVars);
-//		addLine("(" + functionName + ")");
-//		addLine("@SP");
-//		addLine("A=M");
-//		for (int i = 0; i < nVars; i++) {
-//			writePushPop(CommandType.C_PUSH, "constant", 0);
-//		}
-//	}
-//
-//	public void writeCall(String functionName, int nArgs) {
-//		pw.println("// call " + functionName + " " + nArgs);
-//		writeGoto(functionName);
-//		if (fileLabelNumber.containsKey(functionName)) {
-//			fileLabelNumber.put(functionName, fileLabelNumber.get(functionName) + 1);
-//			writeLabel(functionName + "$ret" + fileLabelNumber.get(functionName));
-//		} else {
-//			fileLabelNumber.put(functionName, 0);
-//			writeLabel(functionName + "$ret" + fileLabelNumber.get(functionName));
-//		}
-//	}
 
 	public void writeArithmetic(String command) {
 		addLine("@SP" + " // " + command);
@@ -186,6 +145,47 @@ public class CodeWriter {
 			addLine("M=M-1");
 		}
 	}
+
+	public void writeLabel(String label) {
+		pw.println("("+label+")");
+	}
+
+	public void writeGoto(String label) {
+		pw.println("// goto " + label);
+		addLine("@" + label);
+		addLine("0;JMP");
+	}
+
+	public void writeIf(String label) {
+		pw.println("// if-goto " + label);
+		addLine("@SP");
+		addLine("AM=M-1");
+		addLine("D=M");
+		addLine("@" + label);
+		addLine("D;JNE");
+	}
+
+//	public void writeFunction(String functionName, int nVars) {
+//		pw.println("// function " + functionName + " " + nVars);
+//		addLine("(" + functionName + ")");
+//		addLine("@SP");
+//		addLine("A=M");
+//		for (int i = 0; i < nVars; i++) {
+//			writePushPop(CommandType.C_PUSH, "constant", 0);
+//		}
+//	}
+//
+//	public void writeCall(String functionName, int nArgs) {
+//		pw.println("// call " + functionName + " " + nArgs);
+//		writeGoto(functionName);
+//		if (fileLabelNumber.containsKey(functionName)) {
+//			fileLabelNumber.put(functionName, fileLabelNumber.get(functionName) + 1);
+//			writeLabel(functionName + "$ret" + fileLabelNumber.get(functionName));
+//		} else {
+//			fileLabelNumber.put(functionName, 0);
+//			writeLabel(functionName + "$ret" + fileLabelNumber.get(functionName));
+//		}
+//	}
 
 	public void close() {
 		addLine("@" + currentLine + " // close stream");

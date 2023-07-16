@@ -5,8 +5,8 @@ public class Parser {
 	private String nextLine;
 	String[] currentLine;
 
-	public Parser(String filePath) throws FileNotFoundException {
-		this.br = new BufferedReader(new FileReader(filePath));
+	public Parser(File file) throws FileNotFoundException {
+		this.br = new BufferedReader(new FileReader(file));
 	}
 
 	public boolean hasMoreLines() throws IOException {
@@ -30,6 +30,7 @@ public class Parser {
 			case "add", "sub", "neg", "eq", "gt", "lt", "and", "or", "not" -> CommandType.C_ARITHMETIC;
 			case "label" -> CommandType.C_LABEL;
 			case "goto" -> CommandType.C_GOTO;
+			case "if-goto" -> CommandType.C_IF;
 			case "function" -> CommandType.C_FUNCTION;
 			case "return" -> CommandType.C_RETURN;
 			case "call" -> CommandType.C_CALL;
